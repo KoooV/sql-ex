@@ -98,3 +98,9 @@ WHERE print.color = 'y') AND p.color = 'y'
 SELECT pr.maker, AVG(l.screen) AS average FROM Product pr
 JOIN Laptop l ON pr.model = l.model
 GROUP BY pr.maker
+
+-- 20 задание
+SELECT DISTINCT pr.maker, COUNT(pr.model) FROM Product pr
+WHERE pr.type = 'PC'
+GROUP BY pr.maker
+HAVING COUNT(pr.model) >=3
