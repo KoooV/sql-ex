@@ -68,6 +68,33 @@ JOIN Product pr ON pr.maker = 'A' AND pr.model = p.model
 SELECT s.class, s.name, c.country FROM Ships s
 JOIN Classes c ON c.class = s.class AND c.numGuns >= 10
 
+--15 задание
+SELECT p.hd
+FROM PC p
+GROUP BY p.hd
+HAVING COUNT(*) >= 2
 
+-- 16 задание
+SELECT DISTINCT a.model, b.model, a.speed, a.ram
+FROM PC a, PC b
+WHERE a.model > b.model AND a.ram = b.ram AND a.speed = b.speed
 
+--17 задание
+SELECT DISTINCT pr.type, l.model, l.speed
+FROM Product pr, Laptop l
+WHERE l.speed < ALL(
+	SELECT p.speed FROM PC p
+	JOIN Product prod ON p.model = prod.model
+) AND pr.type = 'Laptop'
 
+--18 задание
+SELECT DISTINCT pr.maker, p.price
+FROM Product pr
+JOIN Printer p ON pr.model = p.model
+WHERE p.price <= (SELECT MIN(print.price) FROM Printer print
+WHERE print.color = 'y') AND p.color = 'y'
+
+-- 19 задание
+SELECT pr.maker, AVG(l.screen) AS average FROM Product pr
+JOIN Laptop l ON pr.model = l.model
+GROUP BY pr.maker
