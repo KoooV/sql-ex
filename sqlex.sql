@@ -104,3 +104,46 @@ SELECT DISTINCT pr.maker, COUNT(pr.model) FROM Product pr
 WHERE pr.type = 'PC'
 GROUP BY pr.maker
 HAVING COUNT(pr.model) >=3
+
+-- 21 задание
+SELECT DISTINCT pr.maker, MAX(p.price) AS max_price FROM Product pr
+JOIN PC p ON pr.model = p.model
+GROUP BY pr.maker
+
+-- 22 задание
+SELECT DiSTINCT p.speed, AVG(p.price) FROM PC p
+WHERE p.speed > 600
+GROUP BY p.speed
+
+-- 23 задание
+SELECT DISTINCT pr.maker FROM Product pr
+WHERE pr.type = 'PC' AND pr.model IN (SELECT p.model FROM PC p WHERE p.speed >= 750)
+
+INTERSECT
+	
+SELECT DISTINCT pr.maker FROM Product pr
+WHERE pr.type = 'Laptop' AND pr.model IN (SELECT l.model FROM Laptop l WHERE l.speed >= 750)
+
+-- 24 задание
+WITH maximum AS(
+	SELECT model, price FROM PC
+	WHERE price = (SELECT MAX(price) FROM PC)
+	
+	UNION
+	
+	SELECT model, price FROM Laptop
+	WHERE price = (SELECT MAX(price) FROM Laptop)
+	
+	UNION
+	
+	SELECT model, price FROM Printer
+	WHERE price = (SELECT MAX(price) FROM Printer)
+)
+SELECT model FROM maximum
+WHERE price = (SELECT MAX(price) FROM maximum)
+
+
+
+
+	
+
