@@ -142,6 +142,28 @@ WITH maximum AS(
 SELECT model FROM maximum
 WHERE price = (SELECT MAX(price) FROM maximum)
 
+-- 25 задание
+SELECT DISTINCT pr.maker FROM Product pr
+WHERE pr.type = 'Printer' AND pr.maker IN (
+	SELECT prod.maker FROM Product prod
+	JOIN PC pc ON pc.model = prod.model
+	WHERE pc.ra m = (SELECT MIN(ram) FROM PC) 
+		AND pc.speed = (SELECT MAX(speed) FROM PC
+		WHERE pc.ram = (SELECT MIN(ram) FROM PC))
+	)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
