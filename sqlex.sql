@@ -152,6 +152,79 @@ WHERE pr.type = 'Printer' AND pr.maker IN (
 		WHERE pc.ram = (SELECT MIN(ram) FROM PC))
 	)
 
+-- 26 задание
+WITH average AS(
+	SELECT price FROM PC 
+	WHERE model IN (SELECT model FROM Product WHERE type = 'PC' AND maker = 'A')
+
+	UNION ALL
+	
+	SELECT price FROM Laptop
+	WHERE model IN (SELECT model FROM Product WHERE type = 'Laptop' AND maker = 'A'))
+SELECT AVG(price) AS avg_price FROM average
+
+-- 27 задание
+WITH makers AS(
+	SELECT maker FROM Product
+	WHERE type = 'Printer'
+	
+	INTERSECT
+	
+	SELECT maker FROM Product
+	WHERE type = 'PC')
+SELECT maker, AVG(hd) AS avg_hd FROM PC pc
+JOIN Product pr ON pr.model = pc.model
+WHERE pr.maker IN (SELECT maker FROM makers)
+GROUP BY pr.maker
+
+-- 28 задание
+WITH all_data AS(
+	SELECT COUNT(*) AS all_data FROM Product
+	GROUP BY maker
+	HAVING COUNT(model) = 1
+)
+SELECT COUNT(all_data) AS qty FROM all_data
+
+-- 29 задание
+SELECT i.point, i.date, i.inc, o.out FROM Income_o i
+LEFT JOIN Outcome_o o ON i.date = o.date AND i.point = o.point
+
+UNION
+
+SELECT o.point, o.date, i.inc, o.out FROM Outcome_o o
+LEFT JOIN Income_o i ON i.date = o.date AND i.point = o.point
+
+-- 30 задание
+WITH inc_sum AS (
+    SELECT point, date, SUM(inc) AS total_inc
+    FROM Income
+    GROUP BY point, date
+),
+out_sum AS (
+    SELECT point, date, SUM(out) AS total_out
+    FROM Outcome
+    GROUP BY point, date
+)
+SELECT 
+    COALESCE(i.point, o.point) AS point,
+    COALESCE(i.date, o.date) AS date,
+    o.total_out AS out,
+    i.total_inc AS inc
+FROM inc_sum i
+FULL OUTER JOIN out_sum o
+    ON i.point = o.point AND i.date = o.date
+ORDER BY point, date;
+
+
+
+
+
+
+
+
+
+
+
 
 
 
